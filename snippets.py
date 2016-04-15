@@ -32,17 +32,14 @@ def get(name):
     If there is no such snippet  <insert query> 
     Return the snippet 
     """
-    logging.info("Getting snippet {!r}".format(snippet))
-    cursor = connection.cursor()
-    command = "getting snippet {!r}".format(snippet)
-    
-    cursor.execute(command, (name, snippet))
-    
+    with connection, connection.cursos() as cursor:
+        cursor.execute("select message from snippets where keyword=%s", (name,))
+        row = cursor.fethone()
     connection.commit()
     logging.debug("Snippet stored successfully.")
     
     logging.error("FIXME: Unimplemented - get({!r})".format(name))
-    return snippet
+    return name
     
 def main():
     """Main function"""
